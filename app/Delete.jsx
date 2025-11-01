@@ -17,12 +17,8 @@ const Delete = () => {
     });
     const router = useRouter();
 
-    function goToExhibitsHandler(){
-        router.push("/Exhibits");
-    }
-
-    function goHomeHandler(){
-        router.push("/");
+    function exitHandler(){
+        router.push("/Settings");
     }
 
     return(
@@ -33,17 +29,10 @@ const Delete = () => {
             <View className="flex-row flex-wrap justify-center gap-4 p-4">
                 {cells}
             </View>
-            <TouchableOpacity onPress={goToExhibitsHandler} className='mb-8'>
-                <View className="bg-orange-500 w-96 h-24 rounded-2xl items-center justify-center" >                
-                    <Text className="text-4xl text-white">
-                        Exhibits    
-                    </Text>   
-                </View>  
-            </TouchableOpacity> 
-            <TouchableOpacity onPress={goHomeHandler} className='mb-8'>
+            <TouchableOpacity onPress={exitHandler} className='mb-8'>
                 <View className="bg-green-500 w-96 h-24 rounded-2xl items-center justify-center" >                
                     <Text className="text-4xl text-white">
-                        Home    
+                        Exit    
                     </Text>   
                 </View>  
             </TouchableOpacity> 
