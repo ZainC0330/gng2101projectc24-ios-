@@ -4,10 +4,11 @@ import "../global.css";
 import { useGlobal } from '../contexts/GlobalContext';
 import { useEffect, useState } from 'react';
 
-function Item({image, title, frenchTitle ,video, frenchVideo, basicVideo, basicFrenchVideo, regularDescription, frenchDescription, basicDescription, basicFrenchDescription}){
+function Item({id, image, title, frenchTitle, video, audioVideo, frenchAudioVideo, regularDescription, frenchDescription, basicDescription, basicFrenchDescription, advancedDescription, advancedFrenchDescription, exhibition}){
 
-    const { items, setItems} = useGlobal();
+    const { items, setItems, itemToBeEdited, setItemToBeEdited } = useGlobal();
     const { videoToBePlayed, setVideoToBePlayed } = useGlobal();
+    const { audioVideoToBePlayed, setAudioVideoToBePlayed } = useGlobal();
     const [titleToBeDisplayed, setTitleToBeDisplayed] = useState("");
     const { descriptionToBeDisplayed, setDescriptionToBeDisplayed } = useGlobal();
     const pathname = usePathname();
@@ -16,40 +17,76 @@ function Item({image, title, frenchTitle ,video, frenchVideo, basicVideo, basicF
     const { level, setLevel } = useGlobal();
 
     function engageItemHandler(){
-        if(pathname==="/Exhibits"){
-            router.push("/VideoPlayer");
-        }
-        if(pathname==="/Delete"){
-            setItems(
-                items.filter((it) => {
-                    return (it.image!==image && it.title!==title && it.video!==video);
-                })
-            );
-        }
-    }
-
-    useEffect(() => {
         if(language === "english"){
             setTitleToBeDisplayed(title);
+            setAudioVideoToBePlayed(audioVideo);
             if(level === "regular"){
                 setDescriptionToBeDisplayed(regularDescription);
-                setVideoToBePlayed(video);
             }
             if(level === "basic"){
                 setDescriptionToBeDisplayed(basicDescription);
-                setVideoToBePlayed(basicVideo);
+            }
+            if(level === "advanced"){
+                setDescriptionToBeDisplayed(advancedDescription);
             }
         }
         if(language==="french"){
             setTitleToBeDisplayed(frenchTitle);
+            setAudioVideoToBePlayed(frenchAudioVideo);
             if(level === "regular"){
                 setDescriptionToBeDisplayed(frenchDescription);
-                setVideoToBePlayed(frenchVideo);
             }
             if(level === "basic"){
                 setDescriptionToBeDisplayed(basicFrenchDescription);
-                setVideoToBePlayed(basicFrenchVideo);
+            }
+            if(level === "advanced"){
+                setDescriptionToBeDisplayed(advancedFrenchDescription);
             }            
+        }
+        if(pathname==="/Delete"){
+            setItems(
+                items.filter((it) => {
+                    return (it.id!==id);
+                })
+            );
+            router.push("/Delete");
+        }
+        else if(pathname==="/Edit"){
+            setItemToBeEdited({id: id, image: image, title: title, frenchTitle: frenchTitle, video: video, audioVideo: audioVideo, frenchAudioVideo: frenchAudioVideo, regularDescription: regularDescription, frenchDescription: frenchDescription, basicDescription: basicDescription, basicFrenchDescription: basicFrenchDescription, advancedDescription: advancedDescription, advancedFrenchDescription: advancedFrenchDescription, exhibition: exhibition});
+            router.push("/ExhibitEditor");
+        }
+        else{
+            router.push("/VideoPlayer");
+        }
+    }
+
+    useEffect(() => {
+        setVideoToBePlayed(video);
+        if(language === "english"){
+            setAudioVideoToBePlayed(audioVideo);
+            setTitleToBeDisplayed(title);
+            if(level === "regular"){
+                setDescriptionToBeDisplayed(regularDescription);
+            }
+            if(level === "basic"){
+                setDescriptionToBeDisplayed(basicDescription);
+            }
+            if(level === "advanced"){
+                setDescriptionToBeDisplayed(advancedDescription);
+            }
+        }
+        if(language==="french"){
+            setAudioVideoToBePlayed(frenchAudioVideo);
+            setTitleToBeDisplayed(frenchTitle);
+            if(level === "regular"){
+                setDescriptionToBeDisplayed(frenchDescription);
+            }
+            if(level === "basic"){
+                setDescriptionToBeDisplayed(basicFrenchDescription);
+            }
+            if(level === "advanced"){
+                setDescriptionToBeDisplayed(advancedFrenchDescription);
+            }        
         }
     }, [language, level]);
 

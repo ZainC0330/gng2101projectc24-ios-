@@ -2,18 +2,20 @@ import { Pressable, StyleSheet, Text, Image, TouchableOpacity, View, Alert, Text
 import { Link, useLocalSearchParams, useRouter, usePathname } from 'expo-router';
 import "../global.css";
 import Item from './Item';
+import ExhibitionItem from './ExhibitionItem';
 import { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker'; 
 import { useGlobal } from '../contexts/GlobalContext';
 
-const Delete = () => {
+const DeleteExhibition = () => {
 
     const { items, setItems } = useGlobal();
+    const { exhibitions, setExhibitions } = useGlobal();    
     const [image, setImage] = useState("");
     const [title, setTitle] = useState("");
     const [video, setVideo] = useState("");
-    const cells = items.map((it) => {
-        return <Item id={it.id} image={it.image} title={it.title} frenchTitle={it.frenchTitle} video={it.video} audioVideo={it.audioVideo} frenchAudioVideo={it.frenchAudioVideo} regularDescription={it.regularDescription} frenchDescription={it.frenchDescription} basicDescription={it.basicDescription} basicFrenchDescription={it.basicFrenchDescription} advancedDescription={it.advancedDescription} advancedFrenchDescription={it.advancedFrenchDescription} exhibition={it.exhibition}/>
+    const cells = exhibitions.map((ei) => {
+        return <ExhibitionItem id={ei.id} image={ei.image} title={ei.title} frenchTitle={ei.frenchTitle} isCurrent={ei.isCurrent}/>
     });
     const router = useRouter();
 
@@ -23,8 +25,8 @@ const Delete = () => {
 
     return(
         <ScrollView className="bg-red-600 flex-1" contentContainerStyle={{ alignItems: 'center' }}>
-            <Text className="text-6xl font-bold text-white mt-16 mb-8">
-                Delete
+            <Text className="text-6xl font-bold text-white mt-16 mb-8 text-center">
+                Delete Exhibition
             </Text>
             <View className="flex-row flex-wrap justify-center gap-4 p-4">
                 {cells}
@@ -40,6 +42,6 @@ const Delete = () => {
     )
 }
 
-export default Delete;
+export default DeleteExhibition;
 
 const styles = StyleSheet.create({});

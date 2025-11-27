@@ -9,10 +9,13 @@ import Checkbox from 'expo-checkbox';
 
 const Settings = () => {
 
-    const { items, setItems, password, setPassword, language, setLanguage, level, setLevel, radioEnglish, setRadioEnglish, radioFrench, setRadioFrench, radioRegular, setRadioRegular, radioBasic, setRadioBasic } = useGlobal();
+    const { items, setItems, password, setPassword, language, setLanguage, level, setLevel, radioEnglish, setRadioEnglish, radioFrench, setRadioFrench, radioRegular, setRadioRegular, radioBasic, setRadioBasic, radioAdvanced, setRadioAdvanced } = useGlobal();
     const [uploadModalVisibility, setUploadModalVisibility] = useState(false);
     const [deleteModalVisibility, setDeleteModalVisibility] = useState(false);
+    const [uploadExhibitionModalVisibility, setUploadExhibitionModalVisibility] = useState(false);
+    const [deleteExhibitionModalVisibility, setDeleteExhibitionModalVisibility] = useState(false);
     const [changePasswordModalVisibility, setChangePasswordModalVisibility] = useState(false);
+    const [editModalVisibility, setEditModalVisibility] = useState(false);
     const [passwordEntryText, setPasswordEntryText] = useState("");
     const router = useRouter();
 
@@ -24,8 +27,20 @@ const Settings = () => {
         setDeleteModalVisibility(true);
     }
 
+    function uploadExhibitionIntiationHandler(){
+        setUploadExhibitionModalVisibility(true);
+    }
+
+    function deleteExhibitionIntiationHandler(){
+        setDeleteExhibitionModalVisibility(true);
+    }    
+
     function changePasswordIntiationHandler(){
         setChangePasswordModalVisibility(true);
+    }
+
+    function editIntiationHandler(){
+        setEditModalVisibility(true);
     }
 
     function goHomeHandler(){
@@ -33,7 +48,7 @@ const Settings = () => {
     }
 
     function uploadPasswordCheckHandler(){
-        if(passwordEntryText === password){
+        if(passwordEntryText.trim() === password){
             setUploadModalVisibility(false);
             setPasswordEntryText("");
             router.push("/Upload");
@@ -46,7 +61,7 @@ const Settings = () => {
     }
 
     function deletePasswordCheckHandler(){
-        if(passwordEntryText === password){
+        if(passwordEntryText.trim() === password){
             setDeleteModalVisibility(false);
             setPasswordEntryText("");
             router.push("/Delete");
@@ -58,8 +73,34 @@ const Settings = () => {
         }
     }
 
+    function uploadExhibitionPasswordCheckHandler(){
+        if(passwordEntryText.trim() === password){
+            setUploadExhibitionModalVisibility(false);
+            setPasswordEntryText("");
+            router.push("/ExhibitionUpload");
+        }
+        else{
+            Alert.alert("Password Incorrect.");
+            setUploadExhibitionModalVisibility(false);
+            setPasswordEntryText("");
+        }
+    }
+
+    function deleteExhibitionPasswordCheckHandler(){
+        if(passwordEntryText.trim() === password){
+            setDeleteExhibitionModalVisibility(false);
+            setPasswordEntryText("");
+            router.push("/DeleteExhibition");
+        }
+        else{
+            Alert.alert("Password Incorrect.");
+            setDeleteExhibitionModalVisibility(false);
+            setPasswordEntryText("");
+        }
+    }
+
     function changePasswordPasswordCheckHandler(){
-        if(passwordEntryText === password){
+        if(passwordEntryText.trim() === password){
             setChangePasswordModalVisibility(false);
             setPasswordEntryText("");
             router.push("/PasswordManager");
@@ -71,6 +112,19 @@ const Settings = () => {
         }
     }
 
+    function editPasswordCheckHandler(){
+        if(passwordEntryText.trim() === password){
+            setEditModalVisibility(false);
+            setPasswordEntryText("");
+            router.push("/Edit");
+        }
+        else{
+            Alert.alert("Password Incorrect.");
+            setEditModalVisibility(false);
+            setPasswordEntryText("");
+        }
+    }    
+
     function exitPasswordForUploadHandler(){
         setUploadModalVisibility(false);
         setPasswordEntryText("");
@@ -81,10 +135,25 @@ const Settings = () => {
         setPasswordEntryText("");
     }
 
+    function exitPasswordForUploadExhibitionHandler(){
+        setUploadExhibitionModalVisibility(false);
+        setPasswordEntryText("");
+    }
+
+    function exitPasswordForDeleteExhibitionHandler(){
+        setDeleteExhibitionModalVisibility(false);
+        setPasswordEntryText("");
+    }    
+
     function exitPasswordForChangePasswordHandler(){
         setChangePasswordModalVisibility(false);
         setPasswordEntryText("");
     }
+
+    function exitPasswordForEditHandler(){
+        setEditModalVisibility(false);
+        setPasswordEntryText("");
+    }    
 
     function radioEnglishHandler(){
         setRadioEnglish(true);
@@ -101,14 +170,23 @@ const Settings = () => {
     function radioRegularHandler(){
         setRadioRegular(true);
         setRadioBasic(false);
+        setRadioAdvanced(false);
         setLevel("regular");
     }
     
     function radioBasicHandler(){
         setRadioRegular(false);
         setRadioBasic(true);
+        setRadioAdvanced(false);
         setLevel("basic");      
-    }    
+    }
+    
+    function radioAdvancedHandler(){
+        setRadioRegular(false);
+        setRadioBasic(false);
+        setRadioAdvanced(true);
+        setLevel("advanced");      
+    } 
 
     return(
         <ScrollView className="bg-red-600 flex" contentContainerStyle={{ alignItems: 'center' }}>
@@ -141,6 +219,32 @@ const Settings = () => {
                     </TouchableOpacity>
                 </View>
             </Modal>
+            <TouchableOpacity onPress={uploadExhibitionIntiationHandler}>
+                <View className="bg-orange-500 rounded-2xl items-center justify-center w-96 h-24 mb-8" >                
+                    <Text className="text-4xl text-white">
+                        Create New Exhibition    
+                    </Text>   
+                </View>  
+            </TouchableOpacity>
+            <Modal visible={uploadExhibitionModalVisibility}>
+                <View className="flex items-center justify-center h-full w-full">
+                    <Text className="text-black text-4xl">Enter Password</Text>
+                    <TextInput placeholder='' value={passwordEntryText} onChangeText={setPasswordEntryText} className="text-2xl text-black border-2 p-2 w-64 bg-gray-200 mb-2"/>
+                    <TouchableOpacity className="border-2 p-4 rounded-md bg-blue-400 w-40 items-center mb-4" onPress={uploadExhibitionPasswordCheckHandler}>
+                        <Text className="text-white text-2xl">Enter</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity className="border-2 p-4 rounded-md bg-red-400 w-40 items-center" onPress={exitPasswordForUploadExhibitionHandler}>
+                        <Text className="text-white text-2xl">Exit</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+            <TouchableOpacity onPress={editIntiationHandler}>
+                <View className="bg-blue-500 rounded-2xl items-center justify-center w-96 h-24 mb-8" >                
+                    <Text className="text-4xl text-white">
+                        Edit    
+                    </Text>   
+                </View>  
+            </TouchableOpacity>                        
             <TouchableOpacity onPress={deleteIntiationHandler}>
                 <View className="bg-purple-500 rounded-2xl items-center justify-center w-96 h-24 mb-8" >                
                     <Text className="text-4xl text-white">
@@ -148,6 +252,13 @@ const Settings = () => {
                     </Text>   
                 </View>  
             </TouchableOpacity>
+            <TouchableOpacity onPress={deleteExhibitionIntiationHandler}>
+                <View className="bg-pink-500 rounded-2xl items-center justify-center w-96 h-24 mb-8" >                
+                    <Text className="text-4xl text-white">
+                        Delete Exhibition    
+                    </Text>   
+                </View>  
+            </TouchableOpacity>            
             <Modal visible={deleteModalVisibility}>
                 <View className="flex items-center justify-center h-full w-full">
                     <Text className="text-black text-4xl">Enter Password</Text>
@@ -160,6 +271,32 @@ const Settings = () => {
                     </TouchableOpacity>
                 </View>
             </Modal>
+            <Modal visible={deleteExhibitionModalVisibility}>
+                <View className="flex items-center justify-center h-full w-full">
+                    <Text className="text-black text-4xl">Enter Password</Text>
+                    <TextInput placeholder='' value={passwordEntryText} onChangeText={setPasswordEntryText} className="text-2xl text-black border-2 p-2 w-64 bg-gray-200 mb-2"/>
+                    <TouchableOpacity className="border-2 p-4 rounded-md bg-blue-400 w-40 items-center mb-4" onPress={deleteExhibitionPasswordCheckHandler}>
+                        <Text className="text-white text-2xl">Enter</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity className="border-2 p-4 rounded-md bg-red-400 w-40 items-center" onPress={exitPasswordForDeleteExhibitionHandler}>
+                        <Text className="text-white text-2xl">Exit</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+
+            <Modal visible={editModalVisibility}>
+                <View className="flex items-center justify-center h-full w-full">
+                    <Text className="text-black text-4xl">Enter Password</Text>
+                    <TextInput placeholder='' value={passwordEntryText} onChangeText={setPasswordEntryText} className="text-2xl text-black border-2 p-2 w-64 bg-gray-200 mb-2"/>
+                    <TouchableOpacity className="border-2 p-4 rounded-md bg-blue-400 w-40 items-center mb-4" onPress={editPasswordCheckHandler}>
+                        <Text className="text-white text-2xl">Enter</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity className="border-2 p-4 rounded-md bg-red-400 w-40 items-center" onPress={exitPasswordForEditHandler}>
+                        <Text className="text-white text-2xl">Exit</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+
             <Text className="text-white text-5xl mb-8">
                 Language
             </Text>
@@ -202,6 +339,15 @@ const Settings = () => {
                 style={{ width: 40, height: 40 }}
                 />
             </View>
+            <View className="mb-4" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text className="text-white text-4xl mr-2">Advanced</Text>
+                <Checkbox
+                value={radioAdvanced}
+                onValueChange={radioAdvancedHandler}
+                color={radioAdvanced ? '#2196F3' : undefined}
+                style={{ width: 40, height: 40 }}
+                />
+            </View>            
             <TouchableOpacity onPress={changePasswordIntiationHandler}>
                 <View className="bg-orange-500 rounded-2xl items-center justify-center w-96 h-24 mb-8" >                
                     <Text className="text-4xl text-white">

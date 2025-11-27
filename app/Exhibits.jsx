@@ -10,10 +10,19 @@ const Exhibits = () => {
 
     const { items, setItems, password, setPassword } = useGlobal();
     const [passwordEntryText, setPasswordEntryText] = useState("");
-    const cells = items.map((it) => {
-        return <Item image={it.image} title={it.title} frenchTitle={it.frenchTitle} video={it.video} frenchVideo={it.frenchVideo} basicVideo={it.basicVideo} basicFrenchVideo={it.basicFrenchVideo} regularDescription={it.regularDescription} frenchDescription={it.frenchDescription} basicDescription={it.basicDescription} basicFrenchDescription={it.basicFrenchDescription}/>
-    });
     const router = useRouter();
+
+    const cells = items.map((it) => {
+        return <Item id={it.id} image={it.image} title={it.title} frenchTitle={it.frenchTitle} video={it.video} audioVideo={it.audioVideo} frenchAudioVideo={it.frenchAudioVideo} regularDescription={it.regularDescription} frenchDescription={it.frenchDescription} basicDescription={it.basicDescription} basicFrenchDescription={it.basicFrenchDescription} advancedDescription={it.advancedDescription} advancedFrenchDescription={it.advancedFrenchDescription} exhibition={it.exhibition}/>
+    });
+
+    function goCurrentExhibitsHandler(){
+        router.push("/CurrentExhibits");
+    }
+
+    function goPastExhibitsHandler(){
+        router.push("/PastExhibits");
+    }
 
     function goHomeHandler(){
         router.push("/");
@@ -24,16 +33,27 @@ const Exhibits = () => {
             <Text className="text-6xl font-bold text-white mt-16 mb-8">
                 Exhibits
             </Text>
-            <View className="flex-row flex-wrap justify-center gap-4 p-4">
-                {cells}
-            </View>
-            <TouchableOpacity onPress={goHomeHandler} className='mb-8'>
+            <TouchableOpacity onPress={goCurrentExhibitsHandler} className='mb-8'>
                 <View className="bg-green-500 w-96 h-24 rounded-2xl items-center justify-center" >                
+                    <Text className="text-4xl text-white">
+                        Current Exhibits    
+                    </Text>   
+                </View>  
+            </TouchableOpacity>
+            <TouchableOpacity onPress={goPastExhibitsHandler} className='mb-8'>
+                <View className="bg-blue-500 w-96 h-24 rounded-2xl items-center justify-center" >                
+                    <Text className="text-4xl text-white">
+                        Past Exhibits    
+                    </Text>   
+                </View>  
+            </TouchableOpacity>
+            <TouchableOpacity onPress={goHomeHandler} className='mb-8'>
+                <View className="bg-orange-500 w-96 h-24 rounded-2xl items-center justify-center" >                
                     <Text className="text-4xl text-white">
                         Home    
                     </Text>   
                 </View>  
-            </TouchableOpacity>
+            </TouchableOpacity>            
         </ScrollView>
     )
 }
